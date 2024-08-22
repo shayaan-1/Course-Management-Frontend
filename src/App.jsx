@@ -41,7 +41,7 @@ const App = () => (
   <Router>
     <Routes>
       <Route path="/" element={<ForgotPasswordForm />} />
-      <Route path="/reset-password/:token" element={<ResetPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
     </Routes>
   </Router>
 );

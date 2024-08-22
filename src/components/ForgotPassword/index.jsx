@@ -14,14 +14,14 @@ const ForgotPasswordForm = () => {
     const templateParams = {
       to_email: email,
       message: 'Click the link below to reset your password.',
-      reset_link: 'https//localhost:5173/reset-password', // Replace with your reset link
+      reset_link: 'https//localhost:5173/reset-password', 
     };
 
     emailjs.send(
-      'service_hhulbdi',   // Replace with your EmailJS service ID
-      'template_jocmmqd',  // Replace with your EmailJS template ID
+      'service_hhulbdi',   
+      'template_jocmmqd',  
       templateParams,
-      'mxAtLj58FZbHf8xO7'       // Replace with your EmailJS user ID (public key)
+      'mxAtLj58FZbHf8xO7'       
     )
     .then((response) => {
       console.log('Email sent successfully:', response.status, response.text);
