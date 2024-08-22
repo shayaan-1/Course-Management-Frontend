@@ -57,7 +57,7 @@ const LoginForm = () => {
 
         <Form.Item label="Role">
           <Radio.Group onChange={(e) => setRole(e.target.value)} value={role}>
-            <Radio value="user">User</Radio>
+            <Radio value="user">Teacher</Radio>
             <Radio value="admin">Admin</Radio>
           </Radio.Group>
         </Form.Item>
