@@ -12,9 +12,9 @@ const RegisterForm = () => {
 
   const handleRegister = async (values) => {
     try {
-      await dispatch(register({ ...values, role }));
+      dispatch(register({ ...values, role }));
       message.success('Registration successful');
-      form.resetFields(); // Reset form fields after successful registration
+      form.resetFields(); 
     } catch (error) {
       message.error('Registration failed');
     }
@@ -56,7 +56,7 @@ const RegisterForm = () => {
 
         <Form.Item label="Role">
           <Radio.Group onChange={(e) => setRole(e.target.value)} value={role}>
-            <Radio value="user">User</Radio>
+            <Radio value="teacher">User</Radio>
             <Radio value="admin">Admin</Radio>
           </Radio.Group>
         </Form.Item>
