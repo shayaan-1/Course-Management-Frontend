@@ -36,10 +36,13 @@ import 'antd/dist/reset.css';
 import './index.css'; 
 import ResetPassword from '../src/components/ResetPassword'; 
 import ForgotPasswordForm from '../src/components/ForgotPassword';
+import LoginForm from './components/login';
+import RegisterForm from './components/Registerpage';
 
 const App = () => (
   <Router>
     <Routes>
+      {/* <Route path='/' element={<RegisterForm/>}/> */}
       <Route path="/" element={<ForgotPasswordForm />} />
       <Route path="/reset-password" element={<ResetPassword />} />
     </Routes>
