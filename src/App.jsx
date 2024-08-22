@@ -4,10 +4,12 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import LoginForm from './components/login'
 import RegisterForm from './components/Registerpage/RegisterForm'
+import ForgotPasswordForm from './components/forgotpage/Forgotpage'
 
 function App() {
   return (<>
-    <RegisterForm/>
+    
+    <ForgotPasswordForm/>
  </> )
 }
 
