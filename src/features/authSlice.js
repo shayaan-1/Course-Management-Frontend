@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// Define initial state
 const initialState = {
   user: null,
   token: null,
@@ -21,8 +20,13 @@ export const register = createAsyncThunk('/register', async (userDetails) => {
   return response.data;
 });
 
-export const forgotPassword = createAsyncThunk('/forgot-Password', async (email) => {
+export const forgotPassword = createAsyncThunk('/forgot-password', async (email) => {
   const response = await axios.post(`${API_BASE_URL}/forgot-password`, { email });
+  return response.data;
+});
+
+export const resetPassword = createAsyncThunk('/reset-password', async ({ token, newPassword }) => {
+  const response = await axios.post(`${API_BASE_URL}/reset-password`, { token, newPassword });
   return response.data;
 });
 
@@ -69,6 +73,16 @@ const authSlice = createSlice({
         state.status = 'succeeded';
       })
       .addCase(forgotPassword.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(resetPassword.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(resetPassword.fulfilled, (state) => {
+        state.status = 'succeeded';
+      })
+      .addCase(resetPassword.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message;
       });
