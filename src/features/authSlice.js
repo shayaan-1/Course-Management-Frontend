@@ -8,25 +8,25 @@ const initialState = {
   error: null,
 };
 
-const API_BASE_URL = 'https://api.freeapi.app/api/v1/users'; 
+const AUTH_API_BASE_URL = 'https://api.freeapi.app/api/v1/users'; 
 
 export const login = createAsyncThunk('/login', async (credentials) => {
-  const response = await axios.post(`${API_BASE_URL}/login`, credentials);
+  const response = await axios.post(`${AUTH_API_BASE_URL}/login`, credentials);
   return response.data;
 });
 
 export const register = createAsyncThunk('/register', async (userDetails) => {
-  const response = await axios.post(`${API_BASE_URL}/register`, userDetails);
+  const response = await axios.post(`${AUTH_API_BASE_URL}/register`, userDetails);
   return response.data;
 });
 
 export const forgotPassword = createAsyncThunk('/forgot-password', async (email) => {
-  const response = await axios.post(`${API_BASE_URL}/forgot-password`, { email });
+  const response = await axios.post(`${AUTH_API_BASE_URL}/forgot-password`, { email });
   return response.data;
 });
 
 export const resetPassword = createAsyncThunk('/reset-password', async ({ token, newPassword }) => {
-  const response = await axios.post(`${API_BASE_URL}/reset-password`, { token, newPassword });
+  const response = await axios.post(`${AUTH_API_BASE_URL}/reset-password`, { token, newPassword });
   return response.data;
 });
 

@@ -10,11 +10,11 @@ const RegisterForm = () => {
   const [role, setRole] = useState('user');
   const dispatch = useDispatch();
 
-  const handleRegister = async (values) => {
+  const handleRegister = (values) => { //removed unnecessary async
     try {
-      await dispatch(register({ ...values, role }));
+      dispatch(register({ ...values, role }));
       message.success('Registration successful');
-      form.resetFields(); // Reset form fields after successful registration
+      form.resetFields(); 
     } catch (error) {
       message.error('Registration failed');
     }
