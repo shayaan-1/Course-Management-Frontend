@@ -38,15 +38,20 @@ import ResetPassword from '../src/components/ResetPassword';
 import ForgotPasswordForm from '../src/components/ForgotPassword';
 import LoginForm from './components/login';
 import RegisterForm from './components/Registerpage';
+import CourseManagement from './Teachers/Components/ManageCourses/ManageCourse';
+import AddCourse from './Teachers/Components/addcourse/AddCourses';
+import EditCourse from './Teachers/Components/editcourse/EditCourse';
 
 const App = () => (
-  <Router>
-    <Routes>
-      {/* <Route path='/' element={<RegisterForm/>}/> */}
-      <Route path="/" element={<ForgotPasswordForm />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
-    </Routes>
-  </Router>
+  // <Router>
+  //   <Routes>
+  //     <Route path="/" element={<CourseManagement/>} />
+  //     <Route path="/reset-password" element={<ResetPassword />} />
+  //   </Routes>
+  // </Router>
+ <CourseManagement/>
+ //<AddCourse/>
+  //<EditCourse/>
 );
 
 export default App;
