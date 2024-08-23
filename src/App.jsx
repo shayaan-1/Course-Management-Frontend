@@ -42,14 +42,13 @@ import CourseManagement from './components/Teachers/ManageCourse/Managecourses';
 import EditCourse from './components/Teachers/EditCourse/Editcourse';
 
 const App = () => (
-  // <Router>
-  //   <Routes>
-  //     {/* <Route path='/' element={<RegisterForm/>}/> */}
-  //     <Route path="/" element={<ForgotPasswordForm />} />
-  //     <Route path="/reset-password" element={<ResetPassword />} />
-  //   </Routes>
-  // </Router>
-<CourseManagement/>
+  <Router>
+    <Routes>
+      <Route path="/" element={<LoginForm/>} />
+      <Route path="/reset-password" element={<ResetPassword />} />
+    </Routes>
+  </Router>
+//<CourseManagement/>
 //<EditCourse/>
 );
 
