@@ -1,12 +1,16 @@
-import React from 'react';
+import React, {useEffect}from 'react';
 import { Table, Button, Modal } from 'antd';
 //import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteCourse } from '../../../features/courseSlice'; // Assuming the courseSlice is set up as before
+import { deleteCourse, fetchCourses } from '../../../features/courseSlice';
 
 const CourseManagement = () => {
   //  const navigate = useNavigate();
     const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(fetchCourses());
+      }, [dispatch]);
+    //console.log(courses);//check
     const courses = useSelector(state => state.courses.courses);
     const userEmail = useSelector(state => state.auth.loggedInUser?.email || 'No Email');
 
@@ -14,7 +18,7 @@ const CourseManagement = () => {
     //    navigate('/manage-courses/new');
     };
 
-    const handleEditCourse = (id) => {
+    const handleEditCourse = () => {
       //  navigate(`/manage-courses/${id}`);
     };
 
@@ -28,8 +32,8 @@ const CourseManagement = () => {
     const columns = [
         {
             title: 'Course Name',
-            dataIndex: 'name',
-            key: 'name',
+            dataIndex: 'title',
+            key: 'title',
         },
         {
             title: 'Author',

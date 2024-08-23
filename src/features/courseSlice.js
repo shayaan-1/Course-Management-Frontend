@@ -1,52 +1,65 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
 
-const initialState = {
-    courses: [],
-    status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
-    error: null,
-};
+const COURSE_API_BASE_URL = 'http://localhost:8000/courses';
+
+// Thunk to fetch all courses
+export const fetchCourses = createAsyncThunk(`${COURSE_API_BASE_URL}/fetchCourses`, async () => {
+    const response = await axios.get(COURSE_API_BASE_URL);
+    return response.data;
+});
+
+// Thunk to add a new course
+export const addCourse = createAsyncThunk(`${COURSE_API_BASE_URL}/addCourse`, async (course) => {
+    const response = await axios.post(COURSE_API_BASE_URL, course);
+    return response.data;
+});
+
+// Thunk to update an existing course by id
+export const updateCourse = createAsyncThunk(`${COURSE_API_BASE_URL}/updateCourse`, async ({ id, updatedCourse }) => {
+    const response = await axios.put(`${COURSE_API_BASE_URL}/${id}`, updatedCourse);
+    return response.data;
+});
+
+// Thunk to delete a course by id
+export const deleteCourse = createAsyncThunk(`${COURSE_API_BASE_URL}/deleteCourse`, async (id) => {
+    await axios.delete(`${COURSE_API_BASE_URL}/${id}`);
+    return id;
+});
 
 const courseSlice = createSlice({
     name: 'courses',
-    initialState,
-    reducers: {
-        // Create a new course
-        addCourse: (state, action) => {
-            state.courses.push(action.payload);
-        },
-        // Read all courses (could be combined with fetchCourses if using an API)
-        setCourses: (state, action) => {
-            state.courses = action.payload;
-        },
-        // Update a course by id
-        updateCourse: (state, action) => {
-            const { id, updatedCourse } = action.payload;
-            const index = state.courses.findIndex(course => course.id === id);
-            if (index !== -1) {
-                state.courses[index] = updatedCourse;
-            }
-        },
-        // Delete a course by id
-        deleteCourse: (state, action) => {
-            const { id } = action.payload;
-            state.courses = state.courses.filter(course => course.id !== id);
-        },
-        // Optional: Set the loading state
-        setLoading: (state) => {
-            state.status = 'loading';
-        },
-        // Optional: Set the success state
-        setSuccess: (state) => {
-            state.status = 'succeeded';
-        },
-        // Optional: Set the failed state
-        setError: (state, action) => {
-            state.status = 'failed';
-            state.error = action.payload;
-        },
+    initialState: {
+        courses: [],
+        status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
+        error: null,
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchCourses.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchCourses.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.courses = action.payload;
+            })
+            .addCase(fetchCourses.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
+            .addCase(addCourse.fulfilled, (state, action) => {
+                state.courses.push(action.payload);
+            })
+            .addCase(updateCourse.fulfilled, (state, action) => {
+                const index = state.courses.findIndex(course => course.id === action.payload.id);
+                if (index !== -1) {
+                    state.courses[index] = action.payload;
+                }
+            })
+            .addCase(deleteCourse.fulfilled, (state, action) => {
+                state.courses = state.courses.filter(course => course.id !== action.payload);
+            });
     },
 });
-
-export const { addCourse, setCourses, updateCourse, deleteCourse, setLoading, setSuccess, setError } = courseSlice.actions;
 
 export default courseSlice.reducer;
