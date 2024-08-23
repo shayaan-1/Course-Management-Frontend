@@ -31,7 +31,7 @@ const courseSlice = createSlice({
     name: 'courses',
     initialState: {
         courses: [],
-        status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
+        status: 'idle', 
         error: null,
     },
     extraReducers: (builder) => {
