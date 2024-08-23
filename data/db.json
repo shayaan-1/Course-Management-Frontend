@@ -1,31 +1,38 @@
 {
-    "courses": [
-      {
-        "id": 1,
-        "title": "Introduction to React",
-        "description": "Learn the basics of React.",
-        "authorId": 1
-      },
-      {
-        "id": 2,
-        "title": "Advanced Node.js",
-        "description": "Deep dive into Node.js features.",
-        "authorId": 2
-      }
-    ],
-    "authors": [
-      {
-        "id": 1,
-        "name": "John Doe"
-      },
-      {
-        "id": 2,
-        "name": "Jane Smith"
-      },
-      {
-        "id": 3,
-        "name": "Emily Johnson"
-      }
-    ]
-  }
-  
+  "courses": [
+    {
+      "id": "1",
+      "title": "Introduction to React",
+      "description": "Learn the basics of React.",
+      "authorId": 1
+    },
+    {
+      "id": "2",
+      "title": "Advanced Node.js",
+      "description": "Deep dive into Node.js features.",
+      "authorId": 2
+    }
+  ],
+  "authors": [
+    {
+      "id": "1",
+      "name": "John Doe"
+    },
+    {
+      "id": "2",
+      "name": "Jane Smith"
+    },
+    {
+      "id": "3",
+      "name": "Emily Johnson"
+    },
+    {
+      "id": "2f84",
+      "name": "Raza Gillani"
+    },
+    {
+      "id": "8469",
+      "name": "Shayaan Butt"
+    }
+  ]
+}
