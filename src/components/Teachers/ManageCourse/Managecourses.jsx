@@ -12,7 +12,6 @@ const CourseManagement = () => {
       }, [dispatch]);
     //console.log(courses);//check
     const courses = useSelector(state => state.courses.courses);
-    const userEmail = useSelector(state => state.auth.loggedInUser?.email || 'No Email');
 
     const handleAddCourse = () => {
     //    navigate('/manage-courses/new');
@@ -60,7 +59,6 @@ const CourseManagement = () => {
     return (
         <div style={{ padding: '24px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
-                <div>{userEmail}</div>
                 <Button type="primary" onClick={handleAddCourse}>Add Course</Button>
             </div>
             <Table dataSource={courses} columns={columns} rowKey="id" />
