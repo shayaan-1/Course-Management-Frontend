@@ -12,14 +12,14 @@ const ForgotPasswordForm = () => {
     const templateParams = {
       to_email: email,
       message: 'Click the link below to reset your password.',
-      reset_link: 'https://localhost:5173/reset-password',
+      reset_link: import.meta.env.VITE_RESET_PASSWORD_LINK,
     };
 
     emailjs.send(
-      'service_hhulbdi',
-      'template_jocmmqd',
+      import.meta.env.VITE_EMAILJS_SERVICE_ID,
+      import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
       templateParams,
-      'mxAtLj58FZbHf8xO7'
+      import.meta.env.VITE_EMAILJS_USER_ID
     )
       .then(() => {
         message.success('Password reset link sent to your email.');

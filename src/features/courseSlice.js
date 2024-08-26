@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const COURSE_API_BASE_URL = 'http://localhost:8000/courses';
+const COURSE_API_BASE_URL = import.meta.env.VITE_COURSE_API_BASE_URL;
 
 
 // Thunk to fetch all courses

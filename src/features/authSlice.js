@@ -10,7 +10,7 @@ const initialState = {
   role: null,
 };
 
-const AUTH_API_BASE_URL = 'https://api.freeapi.app/api/v1/users';
+const AUTH_API_BASE_URL = import.meta.env.VITE_AUTH_API_BASE_URL;
 
 export const login = createAsyncThunk('auth/login', async (credentials) => {
   const response = await axios.post(`${AUTH_API_BASE_URL}/login`, credentials);
