@@ -1,8 +1,8 @@
 {
   "courses": [
     {
-      "title": "Advanced Node.js",
-      "authorId": "1",
+      "title": "Advanced Node.JS",
+      "authorId": "2",
       "description": "Deep dive into Node.js features.",
       "id": "2"
     },
@@ -11,12 +11,6 @@
       "authorId": "2",
       "description": "Basic Introduction of JS",
       "id": "43eb"
-    },
-    {
-      "id": "2070",
-      "title": "C++",
-      "authorId": "8469",
-      "description": "A course on C++"
     }
   ],
   "authors": [
@@ -39,6 +33,10 @@
     {
       "id": "8469",
       "name": "Shayaan Butt"
+    },
+    {
+      "id": "b36d",
+      "name": "Ibraheem"
     }
   ]
 }

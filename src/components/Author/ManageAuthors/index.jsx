@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Table, Input, Button, Space } from 'antd';
+import { Input, Button, Space } from 'antd';
+import DataTable from '../../Common/DataTable'; 
 import { fetchAuthors, addAuthor } from '../../../features/authorSlice';
 
 const ManageAuthors = () => {
@@ -30,13 +31,13 @@ const ManageAuthors = () => {
   return (
     <div className="p-8">
       <Space direction="vertical" className="w-full">
-        <Table
+        {/* Table Component */}
+        <DataTable
           columns={columns}
           dataSource={authors}
           loading={loading}
-          rowKey="id"
-          className="mt-4 mb-4"
         />
+        {/* Input and Button for adding authors */}
         <Space>
           <Input 
             placeholder="Enter author name"

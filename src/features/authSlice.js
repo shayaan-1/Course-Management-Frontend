@@ -28,8 +28,12 @@ export const forgotPassword = createAsyncThunk('auth/forgotPassword', async (ema
 });
 
 export const resetPassword = createAsyncThunk('auth/resetPassword', async ({ token, newPassword }) => {
-  const response = await axios.post(`${AUTH_API_BASE_URL}/reset-password`, { token, newPassword });
-  return response.data;
+  try {
+    const response = await axios.post(`${AUTH_API_BASE_URL}/reset-password/${token}`, {newPassword });
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Server error');
+  }
 });
 
 // Auth slice

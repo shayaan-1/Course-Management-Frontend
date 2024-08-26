@@ -11,6 +11,7 @@ import EditCourse from './components/Teachers/EditCourse/Editcourse';
 import AppLayout from './AppLayout';
 import ManageAuthors from './components/Author/ManageAuthors';
 import AddCourse from './components/Teachers/AddCourse/Addcourse';
+import ResetPassword from './components/ResetPassword';
 
 const ProtectedRoute = ({ element, role }) => {
   const { user, accessToken } = useSelector((state) => state.auth);
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
   {
     path: '/forgot-password',
     element: <ForgotPasswordForm />,
+  },
+  {
+    path: '/reset-password',
+    element: <ResetPassword/>,
   },
   {
     path: '/',

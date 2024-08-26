@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const COURSE_API_BASE_URL = 'http://localhost:8000/courses';
 
+
 // Thunk to fetch all courses
 export const fetchCourses = createAsyncThunk(`${COURSE_API_BASE_URL}/fetchCourses`, async () => {
     const response = await axios.get(COURSE_API_BASE_URL);

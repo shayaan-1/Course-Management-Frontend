@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
-import { Table, Button, Modal } from 'antd';
+import { Button, Modal } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteCourse, fetchCourses } from '../../../features/courseSlice';
 import { fetchAuthors } from '../../../features/authorSlice';
+import DataTable from '../../Common/DataTable'; 
 
 const CourseManagement = () => {
     const navigate = useNavigate();
@@ -66,12 +67,12 @@ const CourseManagement = () => {
     ];
 
     return (
-        <div style={{ padding: '24px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
-                <Button type="primary" onClick={handleAddCourse}>Add Course</Button>
-            </div>
-            <Table dataSource={courses} columns={columns} rowKey="id" />
-        </div>
+        <DataTable
+          columns={columns}
+          dataSource={courses}
+          onAdd={handleAddCourse}
+          addButtonLabel="Add Course"
+        />
     );
 };
 
