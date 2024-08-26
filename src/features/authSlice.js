@@ -3,41 +3,46 @@ import axios from 'axios';
 
 const initialState = {
   user: null,
-  token: null,
+  accessToken: null,
+  refreshToken: null,
   status: 'idle',
   error: null,
+  role: null,
 };
 
-const AUTH_API_BASE_URL = 'https://api.freeapi.app/api/v1/users'; 
+const AUTH_API_BASE_URL = 'https://api.freeapi.app/api/v1/users';
 
-export const login = createAsyncThunk('/login', async (credentials) => {
+export const login = createAsyncThunk('auth/login', async (credentials) => {
   const response = await axios.post(`${AUTH_API_BASE_URL}/login`, credentials);
   return response.data;
 });
 
-export const register = createAsyncThunk('/register', async (userDetails) => {
+export const register = createAsyncThunk('auth/register', async (userDetails) => {
   const response = await axios.post(`${AUTH_API_BASE_URL}/register`, userDetails);
   return response.data;
 });
 
-export const forgotPassword = createAsyncThunk('/forgot-password', async (email) => {
+export const forgotPassword = createAsyncThunk('auth/forgotPassword', async (email) => {
   const response = await axios.post(`${AUTH_API_BASE_URL}/forgot-password`, { email });
   return response.data;
 });
 
-export const resetPassword = createAsyncThunk('/reset-password', async ({ token, newPassword }) => {
+export const resetPassword = createAsyncThunk('auth/resetPassword', async ({ token, newPassword }) => {
   const response = await axios.post(`${AUTH_API_BASE_URL}/reset-password`, { token, newPassword });
   return response.data;
 });
 
+// Auth slice
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
     logout(state) {
       state.user = null;
-      state.token = null;
+      state.accessToken = null;
+      state.refreshToken = null;
       state.status = 'idle';
+      state.loggedInUser = false;
     },
   },
   extraReducers: (builder) => {
@@ -46,9 +51,12 @@ const authSlice = createSlice({
         state.status = 'loading';
       })
       .addCase(login.fulfilled, (state, action) => {
+        const { accessToken, refreshToken, user , role } = action.payload.data;
         state.status = 'succeeded';
-        state.user = action.payload.user;
-        state.token = action.payload.token;
+        state.user = user;
+        state.accessToken = accessToken;
+        state.refreshToken = refreshToken;
+        state.role = role;
       })
       .addCase(login.rejected, (state, action) => {
         state.status = 'failed';
@@ -58,9 +66,11 @@ const authSlice = createSlice({
         state.status = 'loading';
       })
       .addCase(register.fulfilled, (state, action) => {
+        const { accessToken, refreshToken, user } = action.payload.data;
         state.status = 'succeeded';
-        state.user = action.payload.user;
-        state.token = action.payload.token;
+        state.user = user;
+        state.accessToken = accessToken;
+        state.refreshToken = refreshToken;
       })
       .addCase(register.rejected, (state, action) => {
         state.status = 'failed';

@@ -1,30 +1,39 @@
-import React, {useEffect}from 'react';
+import React, { useEffect } from 'react';
 import { Table, Button, Modal } from 'antd';
-//import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteCourse, fetchCourses } from '../../../features/courseSlice';
+import { fetchAuthors } from '../../../features/authorSlice';
 
 const CourseManagement = () => {
-  //  const navigate = useNavigate();
+    const navigate = useNavigate();
     const dispatch = useDispatch();
+
     useEffect(() => {
         dispatch(fetchCourses());
-      }, [dispatch]);
-    //console.log(courses);//check
-    const courses = useSelector(state => state.courses.courses);
+        dispatch(fetchAuthors());
+    }, [dispatch]);
 
-    const handleAddCourse = () => {
-    //    navigate('/manage-courses/new');
+    const courses = useSelector(state => state.courses.courses);
+    const authors = useSelector(state => state.authors.authors);
+
+    const getAuthorNameById = (authorId) => {
+        const author = authors.find(author => author.id === authorId);
+        return author ? author.name : 'Unknown Author';
     };
 
-    const handleEditCourse = () => {
-      //  navigate(`/manage-courses/${id}`);
+    const handleAddCourse = () => {
+        navigate('/manage-courses/new');
+    };
+
+    const handleEditCourse = (id) => {
+        navigate(`/manage-courses/${id}`);
     };
 
     const handleDeleteCourse = (id) => {
         Modal.confirm({
             title: 'Are you sure you want to delete this course?',
-            onOk: () => dispatch(deleteCourse({ id })),
+            onOk: () => dispatch(deleteCourse(id)),
         });
     };
 
@@ -36,8 +45,8 @@ const CourseManagement = () => {
         },
         {
             title: 'Author',
-            dataIndex: 'author',
             key: 'author',
+            render: (_, record) => getAuthorNameById(record.authorId),
         },
         {
             title: 'Description',

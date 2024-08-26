@@ -1,32 +1,44 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Radio, Typography, message } from 'antd';
 import { useDispatch } from 'react-redux';
-import { login } from '../../features/authSlice'; 
+import { login } from '../../features/authSlice';
+import { useNavigate } from 'react-router-dom';
 
 const { Title } = Typography;
 
 const LoginForm = () => {
   const [form] = Form.useForm();
-  const [role, setRole] = useState('user');
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLogin = async (values) => {
     try {
-      await dispatch(login({ ...values, role }));
-      message.success('Login successful');
+      const resultAction = await dispatch(login({ ...values }));
+  
+      if (login.fulfilled.match(resultAction)) {
+        const { role } = resultAction.payload.data.user;
+        message.success('Login successful');
+        
+        if (role === 'USER') {
+          navigate('/'); // Redirect to course management dashboard
+        } else if (role === 'ADMIN') {
+          navigate('/manage-authors'); // Redirect to author management dashboard
+        }
+      } else {
+        throw new Error(resultAction.error.message || 'Login failed');
+      }
     } catch (error) {
-      message.error('Login failed');
+      message.error(error.message || 'An error occurred during login');
     }
   };
+  
 
   const handleRegister = () => {
-    // Handle registration logic
-    message.info('Redirect to registration page');
+    navigate('/register');
   };
 
   const handleForgotPassword = () => {
-    // Handle forgot password logic
-    message.info('Redirect to forgot password page');
+    navigate('/forgot-password');
   };
 
   return (
@@ -53,13 +65,6 @@ const LoginForm = () => {
           rules={[{ required: true, message: 'Please input your password!' }]}
         >
           <Input.Password placeholder="Password" className="border-gray-300" />
-        </Form.Item>
-
-        <Form.Item label="Role">
-          <Radio.Group onChange={(e) => setRole(e.target.value)} value={role}>
-            <Radio value="user">Teacher</Radio>
-            <Radio value="admin">Admin</Radio>
-          </Radio.Group>
         </Form.Item>
 
         <Form.Item>

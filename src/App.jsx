@@ -1,62 +1,67 @@
-// import { useState } from 'react'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
-// import './App.css'
-// import LoginForm from './components/login'
-// import RegisterForm from './components/Registerpage/RegisterForm'
-// import ForgotPasswordForm from './components/forgotpage/Forgotpage'
-
-// function App() {
-//   return (<>
-    
-//     <ForgotPasswordForm/>
-//  </> )
-// }
-
-// import { useState } from 'react'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
-// import './App.css'
-// import LoginForm from './components/login'
-// import RegisterForm from './components/Registerpage'
-
-// function App() {
-//   return (<>
-//     <RegisterForm/>
-//  </> )
-// }
-
-// export default App;
-
-
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import 'antd/dist/reset.css'; 
 import './index.css'; 
-import ResetPassword from '../src/components/ResetPassword'; 
 import ForgotPasswordForm from '../src/components/ForgotPassword';
 import LoginForm from './components/login';
 import RegisterForm from './components/Registerpage';
 import CourseManagement from './components/Teachers/ManageCourse/Managecourses';
 import EditCourse from './components/Teachers/EditCourse/Editcourse';
-import AppHeader from './components/HeaderComponent/index';
-import AppLayout from './AppLayout'
+import AppLayout from './AppLayout';
+import ManageAuthors from './components/Author/ManageAuthors';
+import AddCourse from './components/Teachers/AddCourse/Addcourse';
+
+const ProtectedRoute = ({ element, role }) => {
+  const { user, accessToken } = useSelector((state) => state.auth);
+
+  if (!accessToken) {
+    return <Navigate to="/login" />;
+  }
+
+  // Role-based redirection
+  if (role && user.role !== role) {
+    return <Navigate to={user.role === 'ADMIN' ? '/manage-authors' : '/'} />;
+  }
+
+  return <AppLayout>{element}</AppLayout>;
+};
+
+const router = createBrowserRouter([
+  {
+    path: '/login',
+    element: <LoginForm />,
+  },
+  {
+    path: '/register',
+    element: <RegisterForm />,
+  },
+  {
+    path: '/forgot-password',
+    element: <ForgotPasswordForm />,
+  },
+  {
+    path: '/',
+    element: <ProtectedRoute element={<CourseManagement />} role="USER" />,
+  },
+  {
+    path: '/manage-courses/new',
+    element: <ProtectedRoute element={<AddCourse />} role="USER" />,
+  },
+  {
+    path: '/manage-courses/:id',
+    element: <ProtectedRoute element={<EditCourse />} role="USER" />,
+  },
+  {
+    path: '/manage-authors',
+    element: <ProtectedRoute element={<ManageAuthors />} role="ADMIN" />,
+  },
+]);
+
 const App = () => (
-//   <Router>
-//     <Routes>
-//       <Route path="/" element={<LoginForm/>} />
-//       <Route path="/reset-password" element={<ResetPassword />} />
-//     </Routes>
-//   </Router>
-// //<CourseManagement/>
-// //<EditCourse/>
-<>
-<AppLayout >
-{<CourseManagement/>}
-</AppLayout>
-</>
+  <>
+    <RouterProvider router={router} />
+  </>
 );
 
 export default App;
-

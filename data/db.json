@@ -1,16 +1,22 @@
 {
   "courses": [
     {
-      "id": "1",
-      "title": "Introduction to React",
-      "description": "Learn the basics of React.",
-      "authorId": 1
+      "title": "Advanced Node.js",
+      "authorId": "1",
+      "description": "Deep dive into Node.js features.",
+      "id": "2"
     },
     {
-      "id": "2",
-      "title": "Advanced Node.js",
-      "description": "Deep dive into Node.js features.",
-      "authorId": 2
+      "title": "Intro to JS",
+      "authorId": "2",
+      "description": "Basic Introduction of JS",
+      "id": "43eb"
+    },
+    {
+      "id": "2070",
+      "title": "C++",
+      "authorId": "8469",
+      "description": "A course on C++"
     }
   ],
   "authors": [

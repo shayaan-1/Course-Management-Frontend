@@ -7,7 +7,7 @@ const { Header } = Layout;
 
 const AppHeader = () => {
   const dispatch = useDispatch();
-  const email = useSelector((state) => state.auth.loggedInUser?.email);
+  const email = useSelector(state => state.auth.user?.email);
 
   const handleLogout = () => {
     dispatch(logout());

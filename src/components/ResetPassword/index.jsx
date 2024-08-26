@@ -2,18 +2,21 @@ import React from 'react';
 import { Form, Input, Button, Typography, message } from 'antd';
 import { useDispatch } from 'react-redux';
 import { resetPassword } from '../../features/authSlice'; 
+import { useNavigate } from 'react-router-dom';
 
 const { Title } = Typography;
 
 const ResetPassword = ({ token }) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleResetPassword = async (values) => {
     try {
-      await dispatch(resetPassword({ token, newPassword: values.newPassword }));
+      dispatch(resetPassword({ token, newPassword: values.newPassword }));
       message.success('Password reset successfully');
       form.resetFields();
+      navigate('/login');
     } catch (error) {
       message.error('Failed to reset password');
     }

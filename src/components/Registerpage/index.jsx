@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Form, Input, Button, Radio, Typography, message } from 'antd';
 import { useDispatch } from 'react-redux';
 import { register } from '../../features/authSlice';
+import { useNavigate } from 'react-router-dom';
 
 const { Title } = Typography;
 
@@ -9,12 +10,14 @@ const RegisterForm = () => {
   const [form] = Form.useForm();
   const [role, setRole] = useState('user');
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleRegister = (values) => { //removed unnecessary async
     try {
       dispatch(register({ ...values, role }));
       message.success('Registration successful');
       form.resetFields(); 
+      navigate('/login');
     } catch (error) {
       message.error('Registration failed');
     }
@@ -56,8 +59,8 @@ const RegisterForm = () => {
 
         <Form.Item label="Role">
           <Radio.Group onChange={(e) => setRole(e.target.value)} value={role}>
-            <Radio value="user">Teacher</Radio>
-            <Radio value="admin">Admin</Radio>
+            <Radio value="USER">Teacher</Radio>
+            <Radio value="ADMIN">Admin</Radio>
           </Radio.Group>
         </Form.Item>
 
