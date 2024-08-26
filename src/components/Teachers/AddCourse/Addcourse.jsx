@@ -1,23 +1,44 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import CustomForm from '../../Common/CustomForm';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAuthors } from '../../../features/authorSlice';
 import { addCourse } from '../../../features/courseSlice';
 import { useNavigate } from 'react-router-dom';
+import { message } from 'antd';
 
 const AddCourse = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   const authors = useSelector(state => state.authors.authors);
+  const fetchAuthorsStatus = useSelector(state => state.authors.status);
 
   useEffect(() => {
-    dispatch(fetchAuthors());
+    const fetchData = async () => {
+      try {
+        await dispatch(fetchAuthors());
+      } catch (error) {
+        message.error('Failed to fetch authors');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
   }, [dispatch]);
 
-  const handleAddCourse = (values) => {
-    dispatch(addCourse(values));
-    navigate('/');
+  const handleAddCourse = async (values) => {
+    try {
+      await dispatch(addCourse(values));
+      message.success('Course added successfully');
+      navigate('/');
+    } catch (error) {
+      message.error('Failed to add course');
+    }
   };
+
+  if (loading) {
+    return <div>Loading...</div>; 
+  }
 
   const formConfig = [
     {

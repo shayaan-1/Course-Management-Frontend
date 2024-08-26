@@ -2,7 +2,7 @@
   "courses": [
     {
       "title": "Advanced Node.JS",
-      "authorId": "2",
+      "authorId": "3",
       "description": "Deep dive into Node.js features.",
       "id": "2"
     },

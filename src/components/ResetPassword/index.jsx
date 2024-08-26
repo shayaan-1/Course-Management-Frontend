@@ -11,11 +11,13 @@ const ResetPassword = ({ token }) => {
 
   const handleResetPassword = async (values) => {
     try {
-      dispatch(resetPassword({ token, newPassword: values.newPassword }));
+      await dispatch(resetPassword({ token, newPassword: values.newPassword }));
       message.success('Password reset successfully');
       navigate('/login');
     } catch (error) {
-      message.error('Failed to reset password');
+      // Check if the error contains a specific message
+      const errorMessage = error?.response?.data?.message || 'Failed to reset password';
+      message.error(errorMessage);
     }
   };
 

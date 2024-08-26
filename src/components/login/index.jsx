@@ -11,41 +11,23 @@ const LoginForm = () => {
 
   const handleLogin = async (values) => {
     try {
-      const resultAction = await dispatch(login({ ...values }));
-
+      const resultAction = await dispatch(login(values));
+  
       if (login.fulfilled.match(resultAction)) {
-        const { role } = resultAction.payload.data.user;
-        message.success('Login successful');
-
-        if (role === 'USER') {
-          navigate('/');
-        } else if (role === 'ADMIN') {
-          navigate('/manage-authors');
-        }
+        const { role, message: successMessage } = resultAction.payload.data.user;
+        
+        message.success(successMessage || 'Login successful');
+  
+        // Role-based redirection
+        navigate(role === 'ADMIN' ? '/manage-authors' : '/');
       } else {
-        throw new Error(resultAction.error.message || 'Login failed');
+        const errorMessage = resultAction.error?.message || 'Login failed';
+        message.error(errorMessage);
       }
     } catch (error) {
-      message.error(error.message || 'An error occurred during login');
+      message.error(error.message || 'An unexpected error occurred. Please try again.');
     }
   };
-
-  // const handleLogin = async (values) => {
-  //   try {
-  //     const response = dispatch(login({ ...values })); // Assume loginAPI is your API call
-  //     if (response && response.message) {
-  //       message.success(response.message);
-  //     } else {
-  //       message.error('Login successful, but no message received.');
-  //     }
-  //   } catch (error) {
-  //     if (error && error.message) {
-  //       message.error(error.message);
-  //     } else {
-  //       message.error('An unexpected error occurred. Please try again.');
-  //     }
-  //   }
-  // };
   
 
   const handleRegister = () => {

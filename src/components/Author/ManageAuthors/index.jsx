@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Input, Button, Space } from 'antd';
 import DataTable from '../../Common/DataTable'; 
@@ -13,12 +13,13 @@ const ManageAuthors = () => {
     dispatch(fetchAuthors());
   }, [dispatch]);
 
-  const handleAddAuthor = () => {
-    if (name.trim()) {
-      dispatch(addAuthor({ name }));
+  const handleAddAuthor = useCallback(() => {
+    const trimmedName = name.trim();
+    if (trimmedName) {
+      dispatch(addAuthor({ name: trimmedName }));
       setName('');
     }
-  };
+  }, [dispatch, name]);
 
   const columns = [
     {
@@ -31,23 +32,23 @@ const ManageAuthors = () => {
   return (
     <div className="p-8">
       <Space direction="vertical" className="w-full">
-        {/* Table Component */}
         <DataTable
           columns={columns}
           dataSource={authors}
           loading={loading}
         />
-        {/* Input and Button for adding authors */}
         <Space>
           <Input 
             placeholder="Enter author name"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            onPressEnter={handleAddAuthor} // Allow submission with Enter key
             className="w-80"
           />
           <Button 
             type="primary" 
             onClick={handleAddAuthor} 
+            disabled={!name.trim()} // Disable button if input is empty
             className="bg-blue-500 text-white">
             Add Author
           </Button>

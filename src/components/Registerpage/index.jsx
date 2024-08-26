@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import CustomForm from '../Common/CustomForm';
 import { useDispatch } from 'react-redux';
 import { register } from '../../features/authSlice';
@@ -6,25 +6,24 @@ import { useNavigate } from 'react-router-dom';
 import { message } from 'antd';
 
 const RegisterForm = () => {
-  const [role, setRole] = useState('USER'); // Set default role as 'USER'
+  const [role, setRole] = useState('USER'); // Default role is 'USER'
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleRegister = async (values) => {
+  const handleRegister = useCallback(async (values) => {
     try {
       const resultAction = await dispatch(register({ ...values, role }));
-      
-      // Check if the registration was successful
+
       if (register.fulfilled.match(resultAction)) {
         message.success('Registration successful');
         navigate('/login');
       } else {
-        throw new Error(resultAction.error.message || 'Registration failed');
+        throw new Error(resultAction.error?.message || 'Registration failed');
       }
     } catch (error) {
-      message.error(error.message || 'Registration failed');
+      message.error(error.message || 'An unexpected error occurred. Please try again.');
     }
-  };
+  }, [dispatch, navigate, role]);
 
   const formConfig = [
     {

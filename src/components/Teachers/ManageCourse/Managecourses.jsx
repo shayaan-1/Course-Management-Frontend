@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Button, Modal } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Button, Modal, Spin, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteCourse, fetchCourses } from '../../../features/courseSlice';
@@ -9,18 +9,31 @@ import DataTable from '../../Common/DataTable';
 const CourseManagement = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(fetchCourses());
-        dispatch(fetchAuthors());
-    }, [dispatch]);
+    const [loading, setLoading] = useState(true);
+    const [authorsMap, setAuthorsMap] = useState(new Map());
 
     const courses = useSelector(state => state.courses.courses);
     const authors = useSelector(state => state.authors.authors);
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                await dispatch(fetchCourses());
+                await dispatch(fetchAuthors());
+                // Create a map for faster author lookup 
+                setAuthorsMap(new Map(authors.map(author => [author.id, author.name])));
+            } catch (error) {
+                message.error('Failed to fetch data');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [dispatch, authors]);
+
     const getAuthorNameById = (authorId) => {
-        const author = authors.find(author => author.id === authorId);
-        return author ? author.name : 'Unknown Author';
+        return authorsMap.get(authorId) || 'Unknown Author';
     };
 
     const handleAddCourse = () => {
@@ -34,7 +47,14 @@ const CourseManagement = () => {
     const handleDeleteCourse = (id) => {
         Modal.confirm({
             title: 'Are you sure you want to delete this course?',
-            onOk: () => dispatch(deleteCourse(id)),
+            onOk: async () => {
+                try {
+                    await dispatch(deleteCourse(id));
+                    message.success('Course deleted successfully');
+                } catch (error) {
+                    message.error('Failed to delete course');
+                }
+            },
         });
     };
 
@@ -66,13 +86,24 @@ const CourseManagement = () => {
         },
     ];
 
+    if (loading) {
+        return <Spin size="large" />;
+    }
+
     return (
-        <DataTable
-          columns={columns}
-          dataSource={courses}
-          onAdd={handleAddCourse}
-          addButtonLabel="Add Course"
-        />
+        <div>
+            <Button 
+                type="primary" 
+                onClick={handleAddCourse} 
+                style={{ marginBottom: 16 }}
+            >
+                Add Course
+            </Button>
+            <DataTable
+              columns={columns}
+              dataSource={courses}
+            />
+        </div>
     );
 };
 

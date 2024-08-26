@@ -16,13 +16,13 @@ const AppHeader = () => {
   return (
     <Header className="bg-white shadow-md flex justify-between items-center p-4">
       <div className="text-black">
-        <span>{email ? `Logged in as: ${email}` : 'Not logged in'}</span>
+        {email ? `Logged in as: ${email}` : 'Not logged in'}
       </div>
-      <div>
+      {email && (
         <Button type="primary" onClick={handleLogout}>
           Logout
         </Button>
-      </div>
+      )}
     </Header>
   );
 };

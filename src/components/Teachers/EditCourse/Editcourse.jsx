@@ -1,19 +1,38 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import CustomForm from '../../Common/CustomForm';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form } from 'antd';  
+import { Form } from 'antd';
 import { updateCourse } from '../../../features/courseSlice';
 import { fetchAuthors } from '../../../features/authorSlice';
 import { useNavigate, useParams } from 'react-router-dom';
+import { message } from 'antd';
 
 const EditCourse = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const course = useSelector(state => state.courses.courses.find(c => c.id === id));
+  const [loading, setLoading] = useState(true);
+  const [course, setCourse] = useState(null);
   const authors = useSelector(state => state.authors.authors);
+  const courseData = useSelector(state => state.courses.courses.find(c => c.id === id));
 
-  const [form] = Form.useForm();  // Create the form instance
+  const [form] = Form.useForm();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await dispatch(fetchAuthors());
+        if (courseData) {
+          setCourse(courseData);
+        }
+      } catch (error) {
+        message.error('Failed to fetch authors');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [dispatch, id, courseData]);
 
   useEffect(() => {
     if (course) {
@@ -21,13 +40,14 @@ const EditCourse = () => {
     }
   }, [course, form]);
 
-  useEffect(() => {
-    dispatch(fetchAuthors());
-  }, [dispatch]);
-
-  const handleUpdateCourse = (values) => {
-    dispatch(updateCourse({ id, updatedCourse: values }));
-    navigate('/');
+  const handleUpdateCourse = async (values) => {
+    try {
+      await dispatch(updateCourse({ id, updatedCourse: values }));
+      message.success('Course updated successfully');
+      navigate('/');
+    } catch (error) {
+      message.error('Failed to update course');
+    }
   };
 
   const formConfig = [
@@ -55,12 +75,20 @@ const EditCourse = () => {
     }
   ];
 
+  if (loading) {
+    return <div>Loading...</div>; 
+  }
+
+  if (!course) {
+    return <div>Course not found</div>; 
+  }
+
   return (
     <CustomForm
       formConfig={formConfig}
       onFinish={handleUpdateCourse}
       initialValues={course}
-      form={form}  // Pass the form instance to CustomForm
+      form={form}
       title="Edit Course"
       buttonText="Update Course"
     />
